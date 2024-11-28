@@ -49,3 +49,12 @@ li.completed {
     text-decoration: line-through;
     color: gray;
 }
+
+button.filter-button {
+    background-color: #007bff;
+    color: white;
+}
+
+button.filter-button:hover {
+    background-color: #0056b3;
+}

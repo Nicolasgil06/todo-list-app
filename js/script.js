@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', loadTasks);
+let currentFilter = 'all';
 
 function apiRequest(url, method, data) {
     return fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: method !== 'GET' ? JSON.stringify(data) : null
     })
     .then(response => {
         if (!response.ok) {
@@ -19,19 +20,30 @@ function loadTasks() {
     fetch('http://localhost/todo-list-app/api/tasks.php')
         .then(response => response.json())
         .then(tasks => {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
-            tasks.forEach(task => {
-                const taskItem = document.createElement('li');
-                taskItem.className = task.status === 'completed' ? 'completed' : '';
-                taskItem.innerHTML = `
-                    ${task.description} (due: ${task.due_date})
-                    <button onclick="toggleTask(${task.id}, '${task.status === 'completed' ? 'pending' : 'completed'}')">Mark as ${task.status === 'completed' ? 'Pending' : 'Completed'}</button>
-                    <button onclick="deleteTask(${task.id})">Delete</button>
-                `;
-                taskList.appendChild(taskItem);
-            });
+            displayTasks(tasks);
         });
+}
+
+function displayTasks(tasks) {
+    const taskList = document.getElementById('taskList');
+    taskList.innerHTML = '';
+    tasks
+        .filter(task => currentFilter === 'all' || task.status === currentFilter)
+        .forEach(task => {
+            const taskItem = document.createElement('li');
+            taskItem.className = task.status === 'completed' ? 'completed' : '';
+            taskItem.innerHTML = `
+                ${task.description} (due: ${task.due_date})
+                <button onclick="toggleTask(${task.id}, '${task.status === 'completed' ? 'pending' : 'completed'}')">Mark as ${task.status === 'completed' ? 'Pending' : 'Completed'}</button>
+                <button onclick="deleteTask(${task.id})">Delete</button>
+            `;
+            taskList.appendChild(taskItem);
+        });
+}
+
+function setFilter(filter) {
+    currentFilter = filter;
+    loadTasks();
 }
 
 function addTask() {
