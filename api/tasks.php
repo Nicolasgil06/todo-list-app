@@ -1,5 +1,5 @@
 <?php
-// incluye la BB
+// incluye la BD
 require '../includes/db_connect.php';
 
 header('Content-Type: application/json');
