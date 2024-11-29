@@ -1,4 +1,5 @@
 <?php
+// incluye la BB
 require '../includes/db_connect.php';
 
 header('Content-Type: application/json');
@@ -7,14 +8,14 @@ header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
-
+//Selecciona las tareas para guardar 
 switch ($requestMethod) {
     case 'GET':
         $stmt = $pdo->query('SELECT * FROM tasks');
         $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($tasks);
         break;
-
+// Controla el guardado de las tareas 
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
         if (isset($data['description'], $data['due_date'])) {
@@ -26,19 +27,19 @@ switch ($requestMethod) {
             echo json_encode(['error' => 'Invalid input']);
         }
         break;
-
+// Actualiza el estado de las tareas
     case 'PUT':
         $data = json_decode(file_get_contents('php://input'), true);
-        if (isset($data['id'], $data['description'], $data['due_date'], $data['status'])) {
-            $stmt = $pdo->prepare('UPDATE tasks SET description = ?, due_date = ?, status = ? WHERE id = ?');
-            $stmt->execute([$data['description'], $data['due_date'], $data['status'], $data['id']]);
+        if (isset($data['id'], $data['status'])) {
+            $stmt = $pdo->prepare('UPDATE tasks SET status = ? WHERE id = ?');
+            $stmt->execute([$data['status'], $data['id']]);
             echo json_encode(['status' => 'success']);
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Invalid input']);
         }
         break;
-
+// Borra las tareas seleccionadas 
     case 'DELETE':
         $data = json_decode(file_get_contents('php://input'), true);
         if (isset($data['id'])) {
@@ -57,4 +58,5 @@ switch ($requestMethod) {
         break;
 }
 ?>
+
 

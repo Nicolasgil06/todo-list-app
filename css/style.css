@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #fecbcb;
     padding: 20px;
 }
 
@@ -20,14 +20,14 @@ input {
 
 button {
     padding: 10px 20px;
-    background-color: #5cb85c;
+    background-color: #f70404;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #4cae4c;
+    background-color: #f97c7c;
 }
 
 ul {
@@ -48,13 +48,4 @@ li {
 li.completed {
     text-decoration: line-through;
     color: gray;
-}
-
-button.filter-button {
-    background-color: #007bff;
-    color: white;
-}
-
-button.filter-button:hover {
-    background-color: #0056b3;
 }

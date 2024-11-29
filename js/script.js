@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', loadTasks);
 let currentFilter = 'all';
-
+//Llamamos la funcion 
 function apiRequest(url, method, data) {
     return fetch(url, {
         method: method,
@@ -23,7 +23,7 @@ function loadTasks() {
             displayTasks(tasks);
         });
 }
-
+//Muestra las tareas realizadas en la pagina 
 function displayTasks(tasks) {
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = '';
@@ -50,6 +50,13 @@ function addTask() {
     const description = document.getElementById('taskDescription').value;
     const dueDate = document.getElementById('taskDueDate').value;
 
+    // Validar que la fecha no sea anterior a la actual 
+    const today = new Date().toISOString().split('T')[0];
+    if (dueDate < today) {
+        alert('Elija una fecha para la tarea.');
+        return;
+    }
+
     apiRequest('http://localhost/todo-list-app/api/tasks.php', 'POST', { description, due_date: dueDate })
         .then(() => {
             document.getElementById('taskDescription').value = '';
@@ -57,12 +64,12 @@ function addTask() {
             loadTasks();
         });
 }
-
-function toggleTask(id, status) {
-    apiRequest('http://localhost/todo-list-app/api/tasks.php', 'PUT', { id, status })
+// Actualiza las tareas 
+function toggleTask(id, newStatus) {
+    apiRequest('http://localhost/todo-list-app/api/tasks.php', 'PUT', { id, status: newStatus })
         .then(loadTasks);
 }
-
+//Elimina las tareas
 function deleteTask(id) {
     apiRequest('http://localhost/todo-list-app/api/tasks.php', 'DELETE', { id })
         .then(loadTasks);
