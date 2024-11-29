@@ -1,4 +1,3 @@
-<!--ayuda con la reescritura del URL-->
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^api/(.*)$ api/$1 [L]
